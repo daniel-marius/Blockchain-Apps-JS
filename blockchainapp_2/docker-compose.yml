@@ -1,0 +1,27 @@
+version: '3'
+services:
+  peer1:
+    container_name: peer1
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3001:3001"
+      - "5001:5001"
+    stdin_open: true
+
+  peer2:
+    container_name: peer2
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3002:3002"
+      - "5002:5002"
+    environment:
+      - HTTP_PORT=3002
+      - P2P_PORT=5002
+      - PEERS=ws://localhost:5001
+    stdin_open: true
+    depends_on:
+      - peer1
